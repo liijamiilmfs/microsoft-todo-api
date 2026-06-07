@@ -1,0 +1,16 @@
+{
+  "name": "microsoft-todo-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Lightweight Microsoft To Do client for Microsoft Graph v1.0.",
+  "exports": {
+    ".": "./src/todoClient.ts"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
