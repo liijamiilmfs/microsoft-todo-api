@@ -2,13 +2,9 @@ import {
   MicrosoftTodoClient,
   type ShoppingTaskInput
 } from "../src/todoClient.ts";
+import { resolveGraphAccessToken } from "../src/graphAuth.ts";
 
-const accessToken = process.env.GRAPH_ACCESS_TOKEN;
-
-if (!accessToken) {
-  throw new Error("Set GRAPH_ACCESS_TOKEN before running this example.");
-}
-
+const accessToken = await resolveGraphAccessToken(process.env);
 const client = new MicrosoftTodoClient(accessToken);
 
 const shoppingItems: ShoppingTaskInput[] = [

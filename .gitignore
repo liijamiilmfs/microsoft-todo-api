@@ -4,6 +4,11 @@ coverage/
 .env
 .env.*
 !.env.example
+.codex/full-feature-tdd/
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
+
+# Daily ToDos
+docs/daily-todos/*.md
+docs/superpowers/
