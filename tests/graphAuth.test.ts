@@ -15,6 +15,26 @@ function authenticationResult(accessToken: string) {
   return { accessToken } as never;
 }
 
+test("rejects multiple cached accounts before requesting any token", async () => {
+  const client: MsalTokenClient = {
+    getTokenCache: () => ({
+      getAllAccounts: async () => [
+        { homeAccountId: "account-1" },
+        { homeAccountId: "account-2" }
+      ] as never
+    }),
+    acquireTokenSilent: async () => assert.fail("Must not select a cached account"),
+    acquireTokenByDeviceCode: async () => assert.fail("Must not start sign-in")
+  };
+  const provider = new MsalGraphTokenProvider(client, () => undefined);
+
+  await assert.rejects(() => provider.getAccessToken(), (error: unknown) => {
+    assert.ok(error instanceof GraphAuthenticationError);
+    assert.match(error.message, /multiple.*accounts/i);
+    return true;
+  });
+});
+
 test("returns a silently acquired cached token without starting device code", async () => {
   let deviceCodeCalls = 0;
   let silentScopes: string[] = [];

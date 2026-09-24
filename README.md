@@ -48,6 +48,11 @@ npm run example:shopping
 For troubleshooting only, `GRAPH_ACCESS_TOKEN` may be set in `.env` as an
 explicit override. Do not commit it.
 
+If multiple Microsoft accounts are cached, authentication stops. Clear this
+app's protected token cache, then sign in with the intended account. On macOS
+and Linux, this includes the Keychain/Secret Service entry for service
+`microsoft-todo-api`, account `default`; changing the cache file path is not enough.
+
 ## Security and cost model
 
 - This app runs locally: it creates no server, database, Azure compute, or

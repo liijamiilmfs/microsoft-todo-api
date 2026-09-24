@@ -1,5 +1,6 @@
+import { mkdir } from "node:fs/promises";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 import {
   InteractionRequiredAuthError,
@@ -9,11 +10,7 @@ import {
   type DeviceCodeRequest,
   type SilentFlowRequest
 } from "@azure/msal-node";
-import {
-  DataProtectionScope,
-  PersistenceCachePlugin,
-  PersistenceCreator
-} from "@azure/msal-node-extensions";
+import type { PersistenceCachePlugin } from "@azure/msal-node-extensions";
 
 export const GRAPH_TASKS_SCOPE = "Tasks.ReadWrite";
 
@@ -59,6 +56,11 @@ export class MsalGraphTokenProvider implements GraphAccessTokenProvider {
 
   async getAccessToken(): Promise<string> {
     const accounts = await this.client.getTokenCache().getAllAccounts();
+    if (accounts.length > 1) {
+      throw new GraphAuthenticationError(
+        "Multiple Microsoft accounts are cached. Clear this application's protected token cache, then sign in with the intended account."
+      );
+    }
     const account = accounts[0];
 
     if (account) {
@@ -100,30 +102,14 @@ export async function createGraphAccessTokenProvider(
     throw new GraphAuthenticationError("GRAPH_CLIENT_ID is required.");
   }
 
-  let persistence: Awaited<ReturnType<typeof PersistenceCreator.createPersistence>>;
-
-  try {
-    persistence = await PersistenceCreator.createPersistence({
-      cachePath: options.cachePath ?? defaultCachePath(),
-      dataProtectionScope: DataProtectionScope.CurrentUser,
-      serviceName: "microsoft-todo-api",
-      accountName: "default",
-      usePlaintextFileOnLinux: false
-    });
-  } catch (error: unknown) {
-    throw new GraphAuthenticationError(
-      "Unable to initialize the protected Microsoft Graph token cache. On Linux, install a Secret Service/LibSecret provider; plaintext cache fallback is disabled.",
-      { cause: error }
-    );
-  }
-
+  const cachePlugin = await createProtectedCache(options.cachePath ?? defaultCachePath());
   const client = new PublicClientApplication({
     auth: {
       clientId: options.clientId,
       authority: `https://login.microsoftonline.com/${options.tenantId ?? "common"}`
     },
     cache: {
-      cachePlugin: new PersistenceCachePlugin(persistence)
+      cachePlugin
     }
   });
 
@@ -131,6 +117,27 @@ export async function createGraphAccessTokenProvider(
     client,
     options.onDeviceCode ?? ((message) => console.log(message))
   );
+}
+
+async function createProtectedCache(cachePath: string): Promise<PersistenceCachePlugin> {
+  try {
+    const { DataProtectionScope, PersistenceCachePlugin, PersistenceCreator } =
+      await import("@azure/msal-node-extensions");
+    await mkdir(dirname(cachePath), { recursive: true, mode: 0o700 });
+    const persistence = await PersistenceCreator.createPersistence({
+      cachePath,
+      dataProtectionScope: DataProtectionScope.CurrentUser,
+      serviceName: "microsoft-todo-api",
+      accountName: "default",
+      usePlaintextFileOnLinux: false
+    });
+    return new PersistenceCachePlugin(persistence);
+  } catch (error: unknown) {
+    throw new GraphAuthenticationError(
+      "Unable to initialize the protected Microsoft Graph token cache. On Linux, install a Secret Service/LibSecret provider; plaintext cache fallback is disabled.",
+      { cause: error }
+    );
+  }
 }
 
 export type GraphEnvironment = Pick<
