@@ -1,5 +1,11 @@
 # Microsoft To Do API Client
 
+[![CI](https://github.com/liijamiilmfs/microsoft-todo-api/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/liijamiilmfs/microsoft-todo-api/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/liijamiilmfs/microsoft-todo-api/actions/workflows/codeql.yml/badge.svg?branch=dev)](https://github.com/liijamiilmfs/microsoft-todo-api/actions/workflows/codeql.yml)
+[![codecov](https://codecov.io/gh/liijamiilmfs/microsoft-todo-api/branch/dev/graph/badge.svg)](https://codecov.io/gh/liijamiilmfs/microsoft-todo-api)
+[![Release](https://img.shields.io/github/v/release/liijamiilmfs/microsoft-todo-api)](https://github.com/liijamiilmfs/microsoft-todo-api/releases)
+[![Node](https://img.shields.io/badge/node-%3E%3D24-brightgreen)](package.json)
+
 Lightweight TypeScript client for Microsoft To Do through Microsoft Graph v1.0.
 It uses native `fetch` and local, delegated Microsoft sign-in for the included
 examples.
