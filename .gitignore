@@ -1,6 +1,7 @@
 node_modules/
 dist/
 coverage/
+lcov.info
 .env
 .env.*
 !.env.example

@@ -59,8 +59,9 @@ function inputToString(input: string | URL | Request): string {
 }
 
 function readJsonBody(init?: RequestInit): Record<string, unknown> {
-  assert.equal(typeof init?.body, "string");
-  return JSON.parse(init.body as string) as Record<string, unknown>;
+  const body = init?.body;
+  assert.equal(typeof body, "string");
+  return JSON.parse(body as string) as Record<string, unknown>;
 }
 
 test("request prefixes relative paths, adds auth and JSON headers, and parses JSON", async () => {

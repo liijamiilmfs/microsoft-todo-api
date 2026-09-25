@@ -140,10 +140,10 @@ async function createProtectedCache(cachePath: string): Promise<PersistenceCache
   }
 }
 
-export type GraphEnvironment = Pick<
+export type GraphEnvironment = Partial<Pick<
   NodeJS.ProcessEnv,
   "GRAPH_ACCESS_TOKEN" | "GRAPH_CLIENT_ID" | "GRAPH_TENANT_ID"
->;
+>>;
 
 export type GraphAccessTokenProviderFactory = (
   options: GraphAuthOptions

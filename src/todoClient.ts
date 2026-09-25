@@ -114,7 +114,8 @@ export class MicrosoftTodoClient {
     let nextPage: string | undefined = path;
 
     while (nextPage) {
-      const page = await this.request<GraphCollectionResponse<T>>(nextPage);
+      const page: GraphCollectionResponse<T> =
+        await this.request<GraphCollectionResponse<T>>(nextPage);
 
       if (!Array.isArray(page.value)) {
         throw new Error("Expected Microsoft Graph collection response with a value array.");
