@@ -89,7 +89,7 @@ test("falls back to device code when silent acquisition requires interaction", a
       getAllAccounts: async () => [{ homeAccountId: "account-1" }] as never
     }),
     acquireTokenSilent: async () => {
-      throw new InteractionRequiredAuthError("interaction_required");
+      throw new InteractionRequiredAuthError("interaction_required", "interaction_required");
     },
     acquireTokenByDeviceCode: async () => {
       deviceCodeCalls += 1;

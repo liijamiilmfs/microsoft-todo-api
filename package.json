@@ -9,6 +9,8 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.ts",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=src/*.ts --test-reporter=spec --test-reporter=lcov --test-reporter-destination=stdout --test-reporter-destination=lcov.info tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
     "example:auth": "node --env-file-if-exists=.env examples/auth-check.ts",
     "example:basic": "node --env-file-if-exists=.env examples/example-basic.ts",
     "example:shopping": "node --env-file-if-exists=.env examples/example-shopping.ts"
@@ -19,5 +21,9 @@
   "dependencies": {
     "@azure/msal-node": "^5.4.0",
     "@azure/msal-node-extensions": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.6",
+    "typescript": "^7.0.2"
   }
 }

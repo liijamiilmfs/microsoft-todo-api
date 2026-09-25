@@ -82,4 +82,22 @@ and Linux, this includes the Keychain/Secret Service entry for service
 
 ```sh
 npm test
+npm run typecheck
+npm run test:coverage
 ```
+
+## Repository automation
+
+Pull requests and pushes to `dev` or `main` run the tests, TypeScript check,
+coverage upload, and CodeQL. Dependabot checks npm packages and GitHub Actions
+weekly and opens update pull requests against `dev`.
+
+To enable coverage uploads, connect this public repository to Codecov. The
+workflow uses GitHub's OIDC token, so no Codecov upload secret is needed.
+
+To enable Release Please, add a repository Actions secret named
+`RELEASE_PLEASE_TOKEN` with permission to create pull requests and releases in
+this repository. It runs when changes reach `main`, updates the package version
+and changelog from Conventional Commits, and creates GitHub releases. The
+package is private, and this workflow does not publish to npm. A dedicated
+token lets the release pull request run the usual CI checks.
