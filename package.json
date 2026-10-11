@@ -23,7 +23,7 @@
     "@azure/msal-node-extensions": "^5.5.1"
   },
   "devDependencies": {
-    "@types/node": "^26.6.2",
+    "@types/node": "^26.6.4",
     "typescript": "^7.0.2"
   }
 }
