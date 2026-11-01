@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@azure/msal-node": "^6.0.1",
-    "@azure/msal-node-extensions": "^5.5.1"
+    "@azure/msal-node-extensions": "^5.5.4"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",
